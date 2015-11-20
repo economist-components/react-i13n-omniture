@@ -70,8 +70,8 @@ const OmnitureUtils = {
     return '';
   },
   campaignTracking() {
-    s.campaign = s.campaign || s.getQueryParam('fsrc', ':');
-
+    this.campaign = this.campaign || this.getQueryParam('fsrc', ':');
+    debugger;
     // Capture campaign query params and assign to s.campaign, prop65 and eVars.
     var campref = 'none'; // The campaign referrer.
     if (document.referrer) {
@@ -80,9 +80,9 @@ const OmnitureUtils = {
 
     // Handle a possible three campaign params: 'fsrc', 'cid1' and 'cid2'.
     var campArr = {
-      'fsrc' : s.getQueryParam('fsrc', ':'),
-      'cid1' : s.getQueryParam('cid1', ':'),
-      'cid2' : s.getQueryParam('cid2', ':'),
+      'fsrc' : this.getQueryParam('fsrc', ':'),
+      'cid1' : this.getQueryParam('cid1', ':'),
+      'cid2' : this.getQueryParam('cid2', ':'),
     };
 
     for (var key in campArr) {
@@ -104,24 +104,24 @@ const OmnitureUtils = {
         // convert the values back to a string and replace commas with slashes.
         campValue = campValue.join().replace(/,/gi, "/");
         if (key === 'fsrc' || key === 'cid1') {
-          s.campaign = s.prop65 = s.eVar55 = s.eVar56 = s.eVar57 = campValue;
+          this.campaign = this.prop65 = this.eVar55 = this.eVar56 = this.eVar57 = campValue;
         }
 
         if (key === 'cid2') {
-          s.campaign = s.prop65 = s.eVar58 = s.eVar59 = s.eVar60 = campValue;
+          this.campaign = this.prop65 = this.eVar58 = this.eVar59 = this.eVar60 = campValue;
         }
       }
     }
 
     // If campaign info has not been set/sent, send values based on search and
     // referring domain.
-    s.channelManager('fsrc' || 'cid1' || 'cid2');
+    this.channelManager('fsrc' || 'cid1' || 'cid2');
     var campaignCookie = s_getCookie('cname') !== false;
     var eVar23Cookie = s_getCookie('s_evar23') !== false;
-
-    if (!s.campaign && !campaignCookie && !eVar23Cookie) {
-      var referringDomain = s._referringDomain ? s._referringDomain.toLowerCase() : 'none';
-      var channel = s._channel ? s._channel.toLowerCase() : '';
+    debugger;
+    if (!this.campaign && !campaignCookie && !eVar23Cookie) {
+      var referringDomain = this._referringDomain ? this._referringDomain.toLowerCase() : 'none';
+      var channel = this._channel ? this._channel.toLowerCase() : '';
       var campDate = dateNow.getFullYear() + '' + (dateNow.getMonth()+1) + '' + dateNow.getDate() + ' ' + dateNow.getHours() + ':' + dateNow.getMinutes();
       var social = false;
 
@@ -131,17 +131,17 @@ const OmnitureUtils = {
 
       // Set values based on channel or referringDommain.
       if (channel === "natural search") {
-        s.eVar55 = s.eVar56 = s.eVar57 = s.campaign = "ea/natural search/" + s._partner.toLowerCase() + "/none/none/none/earned/" + campDate + "/search/none/none/" + s._keywords.toLowerCase() + "/none/none/none";
+        this.eVar55 = this.eVar56 = this.eVar57 = this.campaign = "ea/natural search/" + this._partner.toLowerCase() + "/none/none/none/earned/" + campDate + "/search/none/none/" + this._keywordthis.toLowerCase() + "/none/none/none";
       }
       else if (channel === "direct load") {
-        s.eVar23 = "direct/direct/direct/none/none/" + document.location.host + "/none/none/none/none/" + s.prop1 + "/none/none/none/none";
+        this.eVar23 = "direct/direct/direct/none/none/" + document.location.host + "/none/none/none/none/" + this.prop1 + "/none/none/none/none";
       }
       else if (social) {
-        s.eVar55 = s.eVar56 = s.eVar57 = s.campaign = "ea/soc ern/" + referringDomain + "/none/none/none/earned/" + campDate + "/post/none/none/none/none/none/none";
+        this.eVar55 = this.eVar56 = this.eVar57 = this.campaign = "ea/soc ern/" + referringDomain + "/none/none/none/earned/" + campDate + "/post/none/none/none/none/none/none";
       }
       else {
         // All others, e.g. not social and not natural search and not direct load.
-        s.eVar23 = "o/oth/" + referringDomain + "/none/none/none/earned/" + campDate + "/other ref/none/none/none/none/none/none";
+        this.eVar23 = "o/oth/" + referringDomain + "/none/none/none/earned/" + campDate + "/other ref/none/none/none/none/none/none";
       }
     }
   },

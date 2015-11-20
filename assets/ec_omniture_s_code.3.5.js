@@ -153,6 +153,7 @@ function s_doPlugins(s) {
   var campaignCookie = s_getCookie('cname') !== false;
   var eVar23Cookie = s_getCookie('s_evar23') !== false;
 
+
   if (!s.campaign && !campaignCookie && !eVar23Cookie) {
     var referringDomain = s._referringDomain ? s._referringDomain.toLowerCase() : 'none';
     var channel = s._channel ? s._channel.toLowerCase() : '';

@@ -5,9 +5,6 @@ export default function tracker(Component, config) {
     componentDidMount() {
       this.emitPageView();
     },
-    componentWillReceiveProps() {
-      this.emitPageView();
-    },
     emitPageView() {
       let pageInfo = reactI13n.getRootI13nNode()._model;
       ['title','template','topic','publishDate']
