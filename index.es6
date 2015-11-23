@@ -33,12 +33,20 @@ export default class OminturePlugin {
           this.config.initialProps
         );
 
-        if(this.config.campaignTracking){
+        if(this.config.campaignTracking || this.config.campaignStackingTracking){
+          // Add necessary plugins to the trackingObject
           Object.assign(
             this.trackingObject,
             OmnitureThirdPartyPlugins
           );
-          OmnitureUtils.campaignTracking.call(this.trackingObject);
+          if(this.config.campaignTracking){
+            // Manipulate informations for campaigns tracking.
+            const campaignsVars = OmnitureUtils.campaignTracking.call(this.trackingObject);
+          }
+          if(this.config.campaignStackingTracking){
+            // Manipulate informations for campaigns tracking.
+            const campaignsStrackingVars = OmnitureUtils.campaignStackingTracking.call(this.trackingObject);
+          }
         }
       }).catch(function(e) {
         console.error('An error loading or executing Omniture has occured: ', e.message);
