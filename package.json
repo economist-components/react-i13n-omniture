@@ -135,6 +135,7 @@
   },
   "devDependencies": {
     "@economist/component-devpack": "^3.4.3",
+    "@economist/component-win-app": "^1.3.0",
     "babel": "^5.8.23",
     "babelify": "^6.3.0",
     "browser-sync": "^2.8.2",
