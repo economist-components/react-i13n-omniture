@@ -78,34 +78,35 @@ const OmnitureUtils = {
     // econofinal or econmobile
     return '';
   },
-  estFormatDate() {
+  estFormatDate(date) {
     // EST
     const offset = -5.0
-    const clientDate = new Date();
+    const clientDate = (date) ? date : new Date();
     const utc = clientDate.getTime() + (clientDate.getTimezoneOffset() * 60000);
     const serverDate = new Date(utc + (3600000*offset));
     return serverDate;
   },
-  hourOfTheDay() {
+  hourOfTheDay(date) {
     // Returns the time of the event in EST time to the closest half hour.
     // Expected output examples
+    // "7:30AM"
     // "11:00AM"
     // "13:30PM"
-    const date = this.estFormatDate();
+    date = (date) ? this.estFormatDate(date) : this.estFormatDate();
     const hours = date.getHours();
     // Round minutes to 0 or 30.
     let minutes = (Math.floor(date.getMinutes()/30) * 30);
     minutes = (minutes) < 30 ? `0${minutes}` : minutes;
     let mid='AM';
     if (hours>12) {
-     mid='pm';
+     mid='PM';
     }
     return `${hours}:${minutes}${mid}`;
   },
-  fullDate() {
+  fullDate(date) {
     // Returns the date, day of week and weektype delimited by a pipe.
     // Expected outupt 27 october 2015|tuesday|weekday
-    const date = this.estFormatDate();
+    date = (date) ? this.estFormatDate(date) : this.estFormatDate();
     const weekDays = [ "sunday" , "monday", "tuesday", "wednesday", "thursday", "friday", "saturday" ];
     const monthNames = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"];
     const day = weekDays[date.getDay()];
@@ -124,7 +125,10 @@ const OmnitureUtils = {
   },
   articlePublishDate(date) {
     // Returns the date the article was published in this format yyyy|mm|dd
-    return (date instanceof Date) ? [ date.getFullYear(), date.getMonth(), ((date.getDay()) < 10 ? `0${date.getDay()}` : date.getDay()) ].join('|') : '';
+    function zeroPrefixed(val) {
+      return val < 10 ? `0${val}` : val;
+    };
+    return (date instanceof Date) ? [ date.getFullYear(), zeroPrefixed(date.getMonth()+1), zeroPrefixed(date.getDate())  ].join('|') : '';
   },
   subscriptionRemaningMonths() {
     // Returns in months the number of months left till subscription expires.

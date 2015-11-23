@@ -49,6 +49,10 @@ export default class DemoApp extends React.Component {
             element: 'Go somewhere link',
           }}
         >Open the console and click me please.</I13nAnchor>
+        <p>Campaign link examples</p>
+        <a href="?cid1=test/test/test/owned/owned/owned">Link 1</a>
+        <a href="?cid1=test/test3/test/owned/owned/owned">Link 2</a>
+        <a href="?cid1=test/test/test/paid/paid/paid/paid/paid">Link 3</a>
       </I13nDiv>
     );
   }

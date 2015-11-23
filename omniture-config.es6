@@ -1,6 +1,6 @@
 /* eslint-disable id-match */
 import slugger from 'slugger';
-import OmnitureUtils from './OmnitureUtils';
+import OmnitureUtils from '@economist/react-i13n-omniture/OmnitureUtils';
 function slug(string) {
   return slugger(String(string || ''), { replacement: '_' });
 }
@@ -38,15 +38,7 @@ const OmnitureConfig = {
     charSet: 'ISO-8859-1',
     /* Conversion Config */
     currencyCode: 'USD',
-    /* Link Tracking Config */
-    trackDownloadLinks: true,
-    trackExternalLinks: true,
-    trackInlineStats: true,
-    linkDownloadFileTypes: 'exe,zip,wav,mp3,mov,mpg,avi,wmv,pdf,doc,docx,xls,xlsx,ppt,pptx',
     linkInternalFilters: 'javascript:,economist.com,economistsubscriptioncom,brightcove.com,doubleclick.net',
-    linkLeaveQueryString: false,
-    linkTrackVars: 'None',
-    linkTrackEvents: 'None',
   },
   // Set the URL of the Omniture script you want to use.
   /* eslint-disable arrow-body-style */
@@ -98,7 +90,6 @@ const OmnitureConfig = {
           slug(nodeProps.title) ].join('|');
       }
 
-      //...OmnitureUtils.campaignStackingTracking(),
       return {
         channel: slug(nodeProps.product),
         pageName,

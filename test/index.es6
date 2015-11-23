@@ -1,7 +1,10 @@
 import ReactI13nOmniture from '../index';
 import spies from 'chai-spies';
+import chaiDatetime from 'chai-datetime';
+import OmnitureUtils from '../OmnitureUtils';
 
 chai.use(spies);
+chai.use(chaiDatetime);
 
 const plugin = new ReactI13nOmniture({
   account: process.env.NODE_ENV === 'production' ? 'economistprod' : 'economistdev',
@@ -67,6 +70,31 @@ describe('OmniturePlugin is a i13n plugin for Omniture', () => {
         //   fakeProps: 'fakeManipulation'
         // }, func);
       });
+    });
+  });
+});
+
+describe('OmnitureUtils is a set of utilities for reacti13nOmniturePlugin', () => {
+  describe('it provides a set of utilities', () => {
+    it('estFormatDate', () => {
+      OmnitureUtils.estFormatDate(new Date('2015/3/26 11:00')).should.equalDate(new Date('Thu Mar 26 2015 06:00:00 GMT+0000 (GMT)'));
+      OmnitureUtils.estFormatDate(new Date('2015/3/26 00:00')).should.equalDate(new Date('Wed Mar 25 2015 19:00:00 GMT+0000 (GMT)'));
+    });
+    it('hourOfTheDay', () => {
+      OmnitureUtils.hourOfTheDay(new Date('2015/3/26 11:15')).should.equal('6:00AM');
+      OmnitureUtils.hourOfTheDay(new Date('2015/3/26 11:35')).should.equal('6:30AM');
+      OmnitureUtils.hourOfTheDay(new Date('2015/3/26 18:35')).should.equal('13:30PM');
+      OmnitureUtils.hourOfTheDay(new Date('2015/3/26 00:00')).should.equal('19:00PM');
+      OmnitureUtils.hourOfTheDay(new Date('2015/3/26 01:20')).should.equal('20:00PM');
+    });
+    it('fullDate', () => {
+      OmnitureUtils.fullDate(new Date('2015/3/26 01:20')).should.equal('25 march 2015|wednesday|weekday');
+      OmnitureUtils.fullDate(new Date('2015/3/30 01:20')).should.equal('29 march 2015|sunday|weekend');
+    });
+    it('articlePublishDate', () => {
+      OmnitureUtils.articlePublishDate(new Date('2015/3/26')).should.equal('2015|03|26');
+      OmnitureUtils.articlePublishDate(new Date('2015/3/6')).should.equal('2015|03|06');
+      OmnitureUtils.articlePublishDate(new Date('2015/11/6')).should.equal('2015|11|06');
     });
   });
 });
