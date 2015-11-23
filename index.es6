@@ -1,4 +1,6 @@
 import promisescript from 'promisescript';
+import OmnitureUtils from './OmnitureUtils';
+import { default as OmnitureThirdPartyPlugins } from './OmnitureThirdPartyPlugins';
 
 export default class OminturePlugin {
 
@@ -30,6 +32,22 @@ export default class OminturePlugin {
           window.s_gi(this.config.account),
           this.config.initialProps
         );
+
+        if(this.config.campaignTracking || this.config.campaignStackingTracking){
+          // Add necessary plugins to the trackingObject
+          Object.assign(
+            this.trackingObject,
+            OmnitureThirdPartyPlugins
+          );
+          if(this.config.campaignTracking){
+            // Manipulate informations for campaigns tracking.
+            const campaignsVars = OmnitureUtils.campaignTracking.call(this.trackingObject);
+          }
+          if(this.config.campaignStackingTracking){
+            // Manipulate informations for campaigns tracking.
+            const campaignsStrackingVars = OmnitureUtils.campaignStackingTracking.call(this.trackingObject);
+          }
+        }
       }).catch(function(e) {
         console.error('An error loading or executing Omniture has occured: ', e.message);
       });
