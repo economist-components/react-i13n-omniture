@@ -1,13 +1,14 @@
 /* eslint-disable id-match */
 import slugger from 'slugger';
 import User from '@economist/user';
+//import OmnitureUtils from '@economist/react-i13n-omniture/OmnitureUtils';
 import OmnitureUtils from './OmnitureUtils';
 function slug(string) {
   return slugger(String(string || ''), { replacement: '_' });
 }
-
+const isProductionEnv = (process.env.ENV === 'prod' && process.env.NODE_ENV === 'production');
 const OmnitureConfig = {
-  account: process.env.NODE_ENV === 'production' ? 'economistcomprod' : 'economistcomdev',
+  account: isProductionEnv ? 'economistcomprod' : 'economistcomdev',
   initialProps: {
     visitorNamespace: 'economist',
     trackingServer: 'stats.economist.com',
@@ -48,12 +49,14 @@ const OmnitureConfig = {
   campaignStackingTracking: true,
   externalScript: '/assets/omniture_h254.min.js',
   eventHandlers: {
-    click: (nodeProps) => ({
-      // Just a fake manipulation
-      linkType: nodeProps.product,
-      linkName: nodeProps.element,
-    }),
+    click: (nodeProps) => {
+      return {
+        linkType: nodeProps.product,
+        linkName: nodeProps.element,
+      }
+    },
     pageview: (nodeProps) => {
+      console.log(nodeProps);
       // Specs for this part here https://docs.google.com/spreadsheets/d/1aSNSeDOmv_mZvmhE-aCo8yAvdK7FW3udLiHJ_YhwpKA/edit#gid=1234313404
       let articleSource = {};
       if (nodeProps.articleSource) {
@@ -107,8 +110,10 @@ const OmnitureConfig = {
         pageURL: location.href,
         contextData: {
           subsection: (nodeProps.topic) ? slug(nodeProps.topic) : '',
+          revampid: 'revamp_ecom|0216',
         },
         prop1: slug(`${nodeProps.channel}_${nodeProps.topic}`),
+        prop2: slug(`${nodeProps.channel}_${nodeProps.topic}`),
         prop4: slug(nodeProps.template),
         prop5: ArticleTitle,
         prop6: OmnitureUtils.graphShot(),
@@ -119,7 +124,8 @@ const OmnitureConfig = {
         prop31: OmnitureUtils.articlePublishDate(nodeProps.publishDate),
         prop32: location.href,
         prop34: OmnitureUtils.deviceDetection(),
-        prop40: '',
+        prop40: User.getUserId(),
+        prop46: User.isMultiUserLicense() ? 'MUL-IP' : '',
         prop53: OmnitureUtils.subscriptionRemaningMonths(),
         prop54: OmnitureUtils.expiredSubscriptionInfo(),
         eVar1: slug(`${nodeProps.channel}_${nodeProps.topic}`),
@@ -133,11 +139,11 @@ const OmnitureConfig = {
         eVar13: OmnitureUtils.userSubscription(),
         eVar31: OmnitureUtils.articlePublishDate(nodeProps.publishDate),
         eVar32: location.href,
-        eVar40: '',
+        eVar40: User.getUserId(),
+        eVar46: User.isMultiUserLicense() ? 'MUL-IP' : '',
         events: 'event2',
         ...articleSource,
       };
-      console.info('Omniture payload', output);
       return output;
     },
   },
