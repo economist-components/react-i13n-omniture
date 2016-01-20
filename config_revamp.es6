@@ -104,6 +104,13 @@ const OmnitureConfig = {
       }
       ArticleTitle = ArticleTitle.join('|');
 
+      let userSubscription = '';
+      if (OmnitureUtils.userSubscription().indexOf('|') > -1) {
+        userSubscription = OmnitureUtils.userSubscription();
+      } else {
+        userSubscription = `${OmnitureUtils.userSubscription()}|none`;
+      }
+
       const output = {
         channel: slug(nodeProps.channel),
         pageName,
@@ -120,7 +127,7 @@ const OmnitureConfig = {
         prop8: OmnitureUtils.hourOfTheDay(),
         prop10: OmnitureUtils.fullDate(),
         prop11: OmnitureUtils.userLoggedIn(),
-        prop13: OmnitureUtils.userSubscription(),
+        prop13: userSubscription,
         prop31: OmnitureUtils.articlePublishDate(nodeProps.publishDate),
         prop32: location.href,
         prop34: OmnitureUtils.deviceDetection(),
@@ -136,7 +143,7 @@ const OmnitureConfig = {
         eVar8: OmnitureUtils.hourOfTheDay(),
         eVar10: OmnitureUtils.fullDate(),
         eVar11: OmnitureUtils.userLoggedIn(),
-        eVar13: OmnitureUtils.userSubscription(),
+        eVar13: userSubscription,
         eVar31: OmnitureUtils.articlePublishDate(nodeProps.publishDate),
         eVar32: location.href,
         eVar40: User.getUserId(),

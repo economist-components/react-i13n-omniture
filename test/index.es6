@@ -132,6 +132,23 @@ describe(`Omniture Re-Vamp configuration is delegated
 to manipulate the page information to be send to Omniture`,() => {
   describe('has a pageView method', () => {
     describe('it return different value for different users', () => {
+      it('it return a value for logged-in user', () => {
+        cookie.save('ec_uid', 1);
+        cookie.load('ec_uid')
+        const pageviewOutput = RevampConfig.eventHandlers.pageview({
+          articleSource: 'web',
+        });
+        pageviewOutput.should.have.property('prop11', 'logged_in');
+        pageviewOutput.should.have.property('eVar11', 'logged_in');
+      });
+      it('it return a value for logged-out user', () => {
+        cookie.remove('ec_uid');
+        const pageviewOutput = RevampConfig.eventHandlers.pageview({
+          articleSource: 'web',
+        });
+        pageviewOutput.should.have.property('prop11', 'not_logged_in');
+        pageviewOutput.should.have.property('eVar11', 'not_logged_in');
+      });
       it('it return a value for anonymous', () => {
         cookie.remove('ec_omniture_user_sub');
         const pageviewOutput = RevampConfig.eventHandlers.pageview({
@@ -139,8 +156,8 @@ to manipulate the page information to be send to Omniture`,() => {
         });
         pageviewOutput.should.have.property('prop11', 'not_logged_in');
         pageviewOutput.should.have.property('eVar11', 'not_logged_in');
-        pageviewOutput.should.have.property('prop13', 'anonymous');
-        pageviewOutput.should.have.property('eVar13', 'anonymous');
+        pageviewOutput.should.have.property('prop13', 'anonymous|none');
+        pageviewOutput.should.have.property('eVar13', 'anonymous|none');
         pageviewOutput.should.have.property('eVar46', '');
         pageviewOutput.should.have.property('prop46', '');
       });
@@ -152,10 +169,28 @@ to manipulate the page information to be send to Omniture`,() => {
         });
         pageviewOutput.should.have.property('prop11', 'not_logged_in');
         pageviewOutput.should.have.property('eVar11', 'not_logged_in');
-        pageviewOutput.should.have.property('prop13', 'bulk-IP');
-        pageviewOutput.should.have.property('eVar13', 'bulk-IP');
+        pageviewOutput.should.have.property('prop13', 'bulk-IP|none');
+        pageviewOutput.should.have.property('eVar13', 'bulk-IP|none');
         pageviewOutput.should.have.property('eVar46', 'MUL-IP');
         pageviewOutput.should.have.property('prop46', 'MUL-IP');
+      });
+      it('it return a value for registered user', () => {
+        cookie.save('ec_omniture_user_sub', 'user_register*2016/01/19');
+        User.setMultiUserLicense(false);
+        const pageviewOutput = RevampConfig.eventHandlers.pageview({
+          articleSource: 'web',
+        });
+        pageviewOutput.should.have.property('prop13', 'user_register|none');
+        pageviewOutput.should.have.property('eVar13', 'user_register|none');
+      });
+      it('it return a value for subscriber user', () => {
+        cookie.save('ec_omniture_user_sub', 'digital-subscriber*2016/01/19');
+        User.setMultiUserLicense(false);
+        const pageviewOutput = RevampConfig.eventHandlers.pageview({
+          articleSource: 'web',
+        });
+        pageviewOutput.should.have.property('prop13', 'digital-subscriber|none');
+        pageviewOutput.should.have.property('eVar13', 'digital-subscriber|none');
       });
     });
     describe('it return different value for different pages', () => {
