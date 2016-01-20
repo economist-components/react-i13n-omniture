@@ -1,7 +1,6 @@
 /* eslint-disable id-match */
 import slugger from 'slugger';
 import User from '@economist/user';
-//import OmnitureUtils from '@economist/react-i13n-omniture/OmnitureUtils';
 import OmnitureUtils from './OmnitureUtils';
 function slug(string) {
   return slugger(String(string || ''), { replacement: '_' });
@@ -63,10 +62,14 @@ const OmnitureConfig = {
         linkInfo.push(slug(nodeProps.element))
       }
       const prop45 = linkInfo.join('>');
+      // linkType is the type of custom link you want Omniture to track.
+      // This can be ‘d’ for file download, ‘o’ for custom link or ‘e’ for exit link.
       return {
-        linkType: nodeProps.product,
+        linkType: 'o',
         linkName: nodeProps.element,
-        prop45
+        variableOverrides: {
+          prop45
+        },
       }
     },
     pageview: (nodeProps) => {
