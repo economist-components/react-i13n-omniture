@@ -260,4 +260,22 @@ to manipulate the page information to be send to Omniture`,() => {
       });
     });
   });
+  describe('has a click method', () => {
+    it('it return a concatenad description of the link the user clicked', () => {
+      cookie.save('ec_omniture_user_sub', 'digital-subscriber*2016/01/19');
+      const fullLink = RevampConfig.eventHandlers.click({
+        component: 'beta-bar',
+        element: 'fallback link',
+        listIndex: 2,
+        product: 'revamp',
+      });
+      fullLink.prop45.should.equal('digital-subscriber>beta-bar>2>fallback_link');
+      cookie.save('ec_omniture_user_sub', 'digital-subscriber*2016/01/19');
+      const partialLink = RevampConfig.eventHandlers.click({
+        element: 'fallback link',
+        product: 'revamp',
+      });
+      partialLink.prop45.should.equal('digital-subscriber>fallback_link');
+    })
+  })
 });

@@ -50,13 +50,26 @@ const OmnitureConfig = {
   externalScript: '/assets/omniture_h254.min.js',
   eventHandlers: {
     click: (nodeProps) => {
+      // CustType+">"+Linkcontainer+">"+LinkNumber+">"+LinkName
+      const linkInfo = [ User.getUserType() ];
+      if (nodeProps.component){
+        linkInfo.push(slug(nodeProps.component))
+      }
+      // If it's part of a list, send the one-index value
+      if (nodeProps.listIndex){
+        linkInfo.push(nodeProps.listIndex)
+      }
+      if (nodeProps.element){
+        linkInfo.push(slug(nodeProps.element))
+      }
+      const prop45 = linkInfo.join('>');
       return {
         linkType: nodeProps.product,
         linkName: nodeProps.element,
+        prop45
       }
     },
     pageview: (nodeProps) => {
-      console.log(nodeProps);
       // Specs for this part here https://docs.google.com/spreadsheets/d/1aSNSeDOmv_mZvmhE-aCo8yAvdK7FW3udLiHJ_YhwpKA/edit#gid=1234313404
       let articleSource = {};
       if (nodeProps.articleSource) {
