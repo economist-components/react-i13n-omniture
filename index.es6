@@ -1,6 +1,6 @@
 import promisescript from 'promisescript';
 
-export default class OminturePlugin {
+export default class OmniturePlugin {
 
   constructor(config) {
     this.config = config;
@@ -15,10 +15,13 @@ export default class OminturePlugin {
 
   ensureScriptHasLoaded() {
     if (!this.script) {
-      this.script = promisescript({
-        url: this.config.externalScript,
-        type: 'script',
-      }).then(() => {
+      const pOmniture = typeof this.config.loadExternalScript === 'function' ?
+        this.config.loadExternalScript() :
+        promisescript({
+          url: this.config.externalScript,
+          type: 'script',
+        });
+      this.script = pOmniture.then(() => {
         if (typeof window === 'undefined' || !window.s_gi) {
           return false;
         }

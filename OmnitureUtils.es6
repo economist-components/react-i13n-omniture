@@ -1,5 +1,4 @@
 import User from '@economist/user';
-import cookie from 'react-cookie';
 
 const OmnitureUtils = {
   graphShot() {
@@ -56,14 +55,14 @@ const OmnitureUtils = {
     // Returns the customer type and the product they have delimited using a pipe.
     // Expected output
     // digital subscriber|ent-product-H,ent-product-A
-    var user_sub_cookie = user.getSubscriptionInfo();
-    if (user_sub_cookie === false) {
-      return 'anonymous';
-    } else if(user.isInternal()) {
+    var user_sub_cookie = User.getSubscriberCookie();
+    if(User.isMultiUserLicense()) {
       return 'bulk-IP';
+    } else if (typeof user_sub_cookie === 'undefined') {
+      return 'anonymous';
     } else {
-      var ec_omniture_user_sub_info = user_sub_cookie.split('*');
-      if (ec_omniture_user_sub_info) {
+      const ec_omniture_user_sub_info = user_sub_cookie.split('*');
+      if (ec_omniture_user_sub_info !== undefined) {
         // Prop13 gets the first bit, which is a | delimited list of entitlements.
         return ec_omniture_user_sub_info[0];
       } else {
@@ -79,11 +78,13 @@ const OmnitureUtils = {
     // Returns the customer type and the product they have delimited using a pipe.
     // Expected output
     // digital subscriber|ent-product-H,ent-product-A
-    let user_sub_cookie = user.getSubscriptionInfo();
+    let user_sub_cookie = User.getSubscriberCookie();
+    if (typeof user_sub_cookie === 'undefined') {
+      return '';
+    }
     // The ec_omniture_user_sub cookie has info for both prop13 and prop54.
     let ec_omniture_user_sub_info = user_sub_cookie.split('*');
-    let subsRemaining = '';
-    if (ec_omniture_user_sub_info) {
+    if (typeof ec_omniture_user_sub_info !== 'undefined') {
       let subsInfo = ec_omniture_user_sub_info[1].split('|');
       if (subsInfo) {
         let subDate = subsInfo[1]; // The subscription date.
@@ -91,18 +92,17 @@ const OmnitureUtils = {
           subDate = new Date(subDate); // Convert to js date.
           let currDate = new Date();
           if (currDate > subDate) {
-            subsRemaining = 'EXPIRED';
+            return 'EXPIRED';
           } else {
             // Get the number of months remaining in the subscription.
             let months = subDate.getMonth() - currDate.getMonth() + (12 * (subDate.getFullYear() - currDate.getFullYear()));
-            subsRemaining = (months > 0) ? (months + 'MO') : ('Less_than_1_MO');
+            return (months > 0) ? (months + 'MO') : ('Less_than_1_MO');
           }
         }
       }
     }
-    return subsRemaining;
   },
-  subscriptionInfo() {
+  expiredSubscriptionInfo() {
     // Returns the sub, renewal or reg date with product delimited by pipe in this format
     // yyyy/mm/dd|yyyy/mm/dd|product
     // 2015/10/13|2016/12/10|ent-product-J
@@ -110,10 +110,12 @@ const OmnitureUtils = {
     // Returns the customer type and the product they have delimited using a pipe.
     // Expected output
     // digital subscriber|ent-product-H,ent-product-A
-    const user_sub_cookie = user.getSubscriptionInfo();
-    const ec_omniture_user_sub_info = user_sub_cookie.split('*');
-    if (ec_omniture_user_sub_info) {
+    const user_sub_cookie = User.getSubscriberCookie();
+    if (user_sub_cookie) {
+      const ec_omniture_user_sub_info = user_sub_cookie.split('*');
       return ec_omniture_user_sub_info[1];
+    } else {
+      return '';
     }
   },
 };

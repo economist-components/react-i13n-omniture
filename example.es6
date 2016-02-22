@@ -3,7 +3,7 @@ import React from 'react';
 import { setupI13n } from 'react-i13n';
 import ReactI13nOmniture from './index';
 import DemoApp from './demoapp';
-import OmnitureConfig from './config_world-in';
+import OmnitureConfig from './config_revamp';
 
 const TrackedApp = setupI13n(DemoApp, {
   rootModelData: {

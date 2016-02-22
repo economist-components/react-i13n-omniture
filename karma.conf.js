@@ -1,5 +1,6 @@
 module.exports = function(config) {
-  const browsers = {
+  const localBrowsers = ['Chrome'];
+  const sauceLabsBrowsers = {
     SauceChromeLatest: {
       base: 'SauceLabs',
       browserName: 'Chrome',
@@ -20,10 +21,6 @@ module.exports = function(config) {
       base: 'SauceLabs',
       browserName: 'MicrosoftEdge',
     },
-    SauceIphoneLatest: {
-      base: 'SauceLabs',
-      browserName: 'iPad',
-    },
     SauceAndroidLatest: {
       base: 'SauceLabs',
       browserName: 'Android',
@@ -31,35 +28,45 @@ module.exports = function(config) {
   };
   config.set({
     basePath: '',
+    browsers: localBrowsers,
+    logLevel: config.LOG_DEBUG,
     frameworks: ['mocha', 'chai'],
     files: [
       require.resolve('chai-spies/chai-spies'),
       require.resolve('chai-things/lib/chai-things'),
       'testbundle.js'
     ],
-    exclude: [
-    ],
-    preprocessors: {
-    },
-    reporters: ['progress', 'saucelabs'],
+    exclude: [],
+    preprocessors: {},
+    reporters: ['mocha'],
     port: 9876,
     colors: true,
+    concurrency: 3,
     logLevel: config.LOG_INFO,
     autoWatch: false,
-    customLaunchers: browsers,
+    captureTimeout: 1000 * 60 * 2,
     browserDisconnectTimeout: 1000 * 60 * 2,
     browserNoActivityTimeout: 1000 * 60 * 2,
-    sauceLabs: {
-      testName: require('./package').name,
-      startConnect: true,
-      build: (function () {
-        if (process.env.GO_PIPELINE_NAME && process.env.GO_PIPELINE_LABEL) {
-          return process.env.GO_PIPELINE_NAME + '-' + process.env.GO_PIPELINE_LABEL;
-        }
-        return 'localbuild-' + new Date().toJSON();
-      })(),
-    },
-    browsers: Object.keys(browsers),
     singleRun: true
-  })
-}
+  });
+
+  if (process.env.SAUCE_ACCESS_KEY) {
+    config.reporters.push('saucelabs');
+    config.set({
+      customLaunchers: sauceLabsBrowsers,
+      browsers: Object.keys(sauceLabsBrowsers),
+      sauceLabs: {
+        testName: require('./package').name,
+        recordVideo: true,
+        startConnect: true,
+        username: process.env.SAUCE_USERNAME || 'economist',
+        build: (function() {
+          if (process.env.GO_PIPELINE_NAME && process.env.GO_PIPELINE_LABEL) {
+            return process.env.GO_PIPELINE_NAME + '-' + process.env.GO_PIPELINE_LABEL;
+          }
+          return 'localbuild-' + new Date().toJSON();
+        })()
+      }
+    });
+  }
+};
