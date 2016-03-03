@@ -6,6 +6,10 @@ export default class OmniturePlugin {
     this.config = config;
   }
 
+  get name() {
+    return 'react-i13n-omniture';
+  }
+
   get eventHandlers() {
     return {
       click: this.click.bind(this),
