@@ -168,7 +168,7 @@
   },
   "peerDependencies": {
     "react": "^0.14.6",
-    "react-i13n": "^2.0.2"
+    "react-i13n": "^2.0.10"
   },
   "pre-commit": [
     "lint"
