@@ -70,7 +70,7 @@ const OmnitureUtils = {
       }
     }
   },
-  subscriptionRemaningMonths() {
+  subscriptionRemaningMonths(currDate = new Date()) {
     // Returns in months the number of months left till subscription expires.
     // Uses the ec_omniture_user_sub_info cookie
     // const cookie = new Cookie();
@@ -90,13 +90,19 @@ const OmnitureUtils = {
         let subDate = subsInfo[1]; // The subscription date.
         if (subDate) {
           subDate = new Date(subDate); // Convert to js date.
-          let currDate = new Date();
           if (currDate > subDate) {
             return 'EXPIRED';
           } else {
             // Get the number of months remaining in the subscription.
-            let months = subDate.getMonth() - currDate.getMonth() + (12 * (subDate.getFullYear() - currDate.getFullYear()));
-            return (months > 0) ? (months + 'MO') : ('Less_than_1_MO');
+            const days = 31;
+            const hours = 24;
+            const minutes = 60;
+            const seconds = 60;
+            const milliseconds = 1000;
+            const oneMonthInMilliseconds = days * hours * minutes * seconds * milliseconds;
+            const expiringTimesInMilliseconds = subDate - currDate;
+            const remainingMonth = Math.floor(expiringTimesInMilliseconds/oneMonthInMilliseconds);
+            return (expiringTimesInMilliseconds > oneMonthInMilliseconds) ? (remainingMonth + 'MO') : ('Less_than_1_MO');
           }
         }
       }

@@ -1,4 +1,5 @@
 import promisescript from 'promisescript';
+// import LoadOmniturePlugins from './OmniturePlugins';
 
 export default class OmniturePlugin {
 
@@ -33,12 +34,16 @@ export default class OmniturePlugin {
         for (let i = 1; i < 50; ++i) {
           props['prop' + i] = '';
         }
+        let s = window.s_gi(this.config.account);
+        if(this.config.initialProps.usePlugins) {
+          LoadOmniturePlugins();
+        }
         this.trackingObject = Object.assign(
-          window.s_gi(this.config.account),
+          s,
           this.config.initialProps
         );
       }).catch(function(e) {
-        console.error('An error loading or executing Omniture has occured: ', e.message);
+        console.error('An error loading or executing Omniture has occured: ', e);
       });
     }
     return this.script;

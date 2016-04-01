@@ -3,6 +3,8 @@ import spies from 'chai-spies';
 import cookie from 'react-cookie';
 import OmnitureUtils from '../OmnitureUtils';
 import User from '@economist/user';
+import Config from '../config';
+mocha.setup({globals: ['s_code', 's_objectID', 's_gi', 's_giqf', 's_giq', 's_an', 's_sp', 's_jn', 's_rep', 's_d', 's_fe', 's_fa', 's_ft', 's_c_il', 's_c_in', 's_i_economist' ]});
 
 chai.use(spies);
 
@@ -34,8 +36,7 @@ const pluginConfig = {
     ].join(''),
     prop3: 'web',
   },
-  // Set the URL of the Omniture script you want to use.
-  externalScript: '//umbobabo.github.io/react-i13n-omniture/assets/omniture_h254.min.js',
+  externalScript: Config.externalScript,
   eventHandlers: {
     click: (nodeProps) => {
       // Just a fake manipulation
@@ -111,29 +112,41 @@ describe('OmniturePlugin is a i13n plugin for Omniture', () => {
           User.setMultiUserLicense(false);
           OmnitureUtils.subscriptionRemaningMonths().should.equal('EXPIRED');
         });
-        it('it return Less_than_1_MO if the subscription is due to expire', () => {
-          var now = new Date();
-          var month = now.getMonth()+1;
-          month = (month < 10) ? `0${month}` : month;
-          var tomorrow = now.getDate()+1;
-          tomorrow = ((tomorrow) < 10) ? `0${tomorrow}` : tomorrow;
-          const expiresDate = `${now.getFullYear()}/${month}/${tomorrow}`;
+        it('it return EXPIRED if there is a recently expired subscription', () => {
+          cookie.remove('ec_omniture_user_sub');
+          const today = new Date('2016/03/30');
+          let expiresDate = '2016/03/28';
           const subscriberInformation = `registered|ent-product-A*2011/02/16|${expiresDate}|ent-product-A`;
           cookie.save('ec_omniture_user_sub', subscriberInformation);
           User.setMultiUserLicense(false);
-          OmnitureUtils.subscriptionRemaningMonths().should.equal('Less_than_1_MO');
+          OmnitureUtils.subscriptionRemaningMonths().should.equal('EXPIRED');
         });
-        it('it return <numberOfRemaningMonths>MO if more than 1 month is remaining', () => {
-          var now = new Date();
-          var month = now.getMonth()+3;
-          month = (month < 10) ? `0${month}` : month;
-          var tomorrow = now.getDate()+1;
-          tomorrow = ((tomorrow) < 10) ? `0${tomorrow}` : tomorrow;
-          const expiresDate = `${now.getFullYear()}/${month}/${tomorrow}`;
+        it('it return Less_than_1_MO if the subscription is due to expire', () => {
+          cookie.remove('ec_omniture_user_sub');
+          const today = new Date('2016/03/30');
+          let expiresDate = '2016/04/05';
           const subscriberInformation = `registered|ent-product-A*2011/02/16|${expiresDate}|ent-product-A`;
           cookie.save('ec_omniture_user_sub', subscriberInformation);
           User.setMultiUserLicense(false);
-          OmnitureUtils.subscriptionRemaningMonths().should.equal('2MO');
+          OmnitureUtils.subscriptionRemaningMonths(today).should.equal('Less_than_1_MO');
+        });
+        it('it return 1MO if 1 month is remaining', () => {
+          cookie.remove('ec_omniture_user_sub');
+          const today = new Date('2016/03/30');
+          let expiresDate = '2016/05/05';
+          const subscriberInformation = `registered|ent-product-A*2011/02/16|${expiresDate}|ent-product-A`;
+          cookie.save('ec_omniture_user_sub', subscriberInformation);
+          User.setMultiUserLicense(false);
+          OmnitureUtils.subscriptionRemaningMonths(today).should.equal('1MO');
+        });
+        it('it return 2MO if more than 2 but less than 3 months are remaining', () => {
+          cookie.remove('ec_omniture_user_sub');
+          const today = new Date('2016/03/30');
+          let expiresDate = '2016/06/05';
+          const subscriberInformation = `registered|ent-product-A*2011/02/16|${expiresDate}|ent-product-A`;
+          cookie.save('ec_omniture_user_sub', subscriberInformation);
+          User.setMultiUserLicense(false);
+          OmnitureUtils.subscriptionRemaningMonths(today).should.equal('2MO');
         });
         it('it return empty string if no information is available', () => {
           cookie.remove('ec_omniture_user_sub');
