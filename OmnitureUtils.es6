@@ -94,15 +94,10 @@ const OmnitureUtils = {
             return 'EXPIRED';
           } else {
             // Get the number of months remaining in the subscription.
-            const days = 31;
-            const hours = 24;
-            const minutes = 60;
-            const seconds = 60;
-            const milliseconds = 1000;
-            const oneMonthInMilliseconds = days * hours * minutes * seconds * milliseconds;
+            const oneMonthInMilliseconds = 2628000000;
             const expiringTimesInMilliseconds = subDate - currDate;
             const remainingMonth = Math.floor(expiringTimesInMilliseconds/oneMonthInMilliseconds);
-            return (expiringTimesInMilliseconds > oneMonthInMilliseconds) ? (remainingMonth + 'MO') : ('Less_than_1_MO');
+            return (remainingMonth > 0) ? (remainingMonth + 'MO') : ('Less_than_1_MO');
           }
         }
       }
