@@ -22,7 +22,7 @@
     "!testbundle.js"
   ],
   "assets": [
-    "assets/omniture_v0.1.0.min.js"
+    "assets/omniture_h254.min.js"
   ],
   "browserify": {
     "transform": [
