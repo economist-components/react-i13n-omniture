@@ -1,4 +1,4 @@
-function LoadOmniturePlugins(){
+function LoadOmniturePlugins(s = {}){
   /************************** PLUGINS SECTION *************************/
 /* You may insert any plugins you wish to use here.                 */
 
@@ -222,6 +222,7 @@ s.m_Media_c="var m=s.m_i('Media');if(m.completeByCloseOffset==undefined)m.comple
   +" Function('a','b',c1+'setTimeout(\"'+v+';o.'+f1+'(0,0)\",o.'+f3+'?500:5000);'+c2);o[f4]=-1;if(m.s.isie)o[f3]=1;o[f7]=0;o[f1](0,0)}};m.as=new Function('e','var m=s_c_il['+m._in+'],l,n;if(m.autoTrack"
   +"&&m.s.d.getElementsByTagName){l=m.s.d.getElementsByTagName(m.s.isie?\"OBJECT\":\"EMBED\");if(l)for(n=0;n<l.length;n++)m.a(l[n]);}');if(s.wd.attachEvent)s.wd.attachEvent('onload',m.as);else if(s.wd."
   +"addEventListener)s.wd.addEventListener('load',m.as,false);if(m.onLoad)m.onLoad(s,m)";
-s.m_i("Media");
+// s.m_i("Media");
+  return s;
 }
 export default LoadOmniturePlugins;

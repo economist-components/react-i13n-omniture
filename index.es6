@@ -1,5 +1,5 @@
 import promisescript from 'promisescript';
-// import LoadOmniturePlugins from './OmniturePlugins';
+import LoadOmniturePlugins from './OmniturePlugins';
 
 export default class OmniturePlugin {
 
@@ -35,11 +35,14 @@ export default class OmniturePlugin {
           props['prop' + i] = '';
         }
         let s = window.s_gi(this.config.account);
-        if(this.config.initialProps.usePlugins) {
-          LoadOmniturePlugins();
-        }
+        // If plugins are enabled Omniture has a "doPlugins" callback
+        const doPluginsDefault = function(){};
+        const doPlugins = this.config.initialProps.usePlugins && this.config.doPlugins ? this.config.doPlugins : doPluginsDefault;
+
         this.trackingObject = Object.assign(
           s,
+          this.config.initialProps.usePlugins ? LoadOmniturePlugins() : {},
+          { doPlugins },
           this.config.initialProps
         );
       }).catch(function(e) {
