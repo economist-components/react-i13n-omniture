@@ -39,6 +39,12 @@ export default class OmniturePlugin {
         const doPluginsDefault = function(){};
         const doPlugins = this.config.initialProps.usePlugins && this.config.doPlugins ? this.config.doPlugins : doPluginsDefault;
 
+        Object.assign(
+          this,
+          this.config.initialProps.usePlugins ? LoadOmniturePlugins() : {},
+          { doPlugins },
+        );
+
         this.trackingObject = Object.assign(
           s,
           this.config.initialProps.usePlugins ? LoadOmniturePlugins() : {},
@@ -60,7 +66,7 @@ export default class OmniturePlugin {
       props = Object.assign(payload, payload.i13nNode.getMergedModel());
     }
     if (eventHandler) {
-      return eventHandler(props);
+      return eventHandler(props, {}, this.trackingObject);
     }
     return props;
   }
