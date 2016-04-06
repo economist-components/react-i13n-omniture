@@ -1,4 +1,5 @@
 import promisescript from 'promisescript';
+import LoadOmniturePlugins from './OmniturePlugins';
 
 export default class OmniturePlugin {
 
@@ -33,12 +34,25 @@ export default class OmniturePlugin {
         for (let i = 1; i < 50; ++i) {
           props['prop' + i] = '';
         }
+        let s = window.s_gi(this.config.account);
+        // If plugins are enabled Omniture has a "doPlugins" callback
+        const doPluginsDefault = function(){};
+        const doPlugins = this.config.initialProps.usePlugins && this.config.doPlugins ? this.config.doPlugins : doPluginsDefault;
+
+        Object.assign(
+          this,
+          this.config.initialProps.usePlugins ? LoadOmniturePlugins() : {},
+          { doPlugins },
+        );
+
         this.trackingObject = Object.assign(
-          window.s_gi(this.config.account),
+          s,
+          this.config.initialProps.usePlugins ? LoadOmniturePlugins() : {},
+          { doPlugins },
           this.config.initialProps
         );
       }).catch(function(e) {
-        console.error('An error loading or executing Omniture has occured: ', e.message);
+        console.error('An error loading or executing Omniture has occured: ', e);
       });
     }
     return this.script;
@@ -52,7 +66,7 @@ export default class OmniturePlugin {
       props = Object.assign(payload, payload.i13nNode.getMergedModel());
     }
     if (eventHandler) {
-      return eventHandler(props);
+      return eventHandler(props, {}, this.trackingObject);
     }
     return props;
   }

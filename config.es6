@@ -41,6 +41,7 @@ const OmnitureConfig = {
     currencyCode: 'USD',
     /* eslint-disable no-script-url */
     linkInternalFilters: 'javascript:,economist.com,economistsubscriptions.com,brightcove.com,doubleclick.net',
+    usePlugins: true,
   },
   // Set the URL of the Omniture script you want to use.
   /* eslint-disable arrow-body-style */
