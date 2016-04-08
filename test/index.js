@@ -1,11 +1,12 @@
-import ReactI13nOmniture from '../index';
+import ReactI13nOmniture from '../src/index';
+import chai from 'chai';
 import spies from 'chai-spies';
 import cookie from 'react-cookie';
-import OmnitureUtils from '../OmnitureUtils';
+import OmnitureUtils from '../src/OmnitureUtils';
 import User from '@economist/user';
-import Config from '../config';
+import Config from '../src/config';
 mocha.setup({globals: ['s_code', 's_objectID', 's_gi', 's_giqf', 's_giq', 's_an', 's_sp', 's_jn', 's_rep', 's_d', 's_fe', 's_fa', 's_ft', 's_c_il', 's_c_in', 's_i_economist' ]});
-
+let should = chai.should();
 chai.use(spies);
 
 const pluginConfig = {
