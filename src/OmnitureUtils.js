@@ -31,7 +31,7 @@ const OmnitureUtils = {
     // Round minutes to 0 or 30.
     const halfAnHour = 30;
     let minutes = (Math.floor(date.getMinutes() / halfAnHour) * halfAnHour);
-    minutes = (minutes) < halfAnHour ? `0${ minutes }` : minutes;
+    minutes = minutes === 0 ? '00' : '30';
     let mid = 'AM';
     const halfDayHours = 12;
     if (hours > halfDayHours) {
