@@ -15,10 +15,10 @@ const OmnitureUtils = {
     // EST
     const offset = -5.0;
     const clientDate = new Date();
-    const hourInMilliseconds = 60000;
-    const currentTime = clientDate.getTime() + (clientDate.getTimezoneOffset() * hourInMilliseconds);
-    const sixHourInMilliseconds = 3600000;
-    const serverDate = new Date(currentTime + (sixHourInMilliseconds * offset));
+    const minuteInMilliseconds = 60000;
+    const currentTime = clientDate.getTime() + (clientDate.getTimezoneOffset() * minuteInMilliseconds);
+    const hourInMilliseconds = 3600000;
+    const serverDate = new Date(currentTime + (hourInMilliseconds * offset));
     return serverDate;
   },
   hourOfTheDay() {
