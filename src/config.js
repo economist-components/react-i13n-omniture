@@ -1,9 +1,8 @@
 /* eslint-disable id-match */
 import slugger from 'slugger';
-import User from '@economist/user';
 import OmnitureUtils from './OmnitureUtils';
-function slug(string) {
-  return slugger(String(string || ''), { replacement: '_' });
+function slug(stringToSlug) {
+  return slugger(String(stringToSlug || ''), { replacement: '_' });
 }
 
 const OmnitureConfig = {
@@ -32,6 +31,7 @@ const OmnitureConfig = {
       'prop46',
       'contextData.subsection',
     ].join(''),
+    /* globals document */
     server: (typeof document === 'undefined') ? '' : document.location.hostname,
     // web or print, They depend by the source of the articles.
     prop3: 'print',
@@ -55,7 +55,8 @@ const OmnitureConfig = {
       linkName: nodeProps.element,
     }),
     pageview: (nodeProps) => {
-      // Specs for this part here https://docs.google.com/spreadsheets/d/1aSNSeDOmv_mZvmhE-aCo8yAvdK7FW3udLiHJ_YhwpKA/edit#gid=1234313404
+      // Specs for this part here
+      // https://docs.google.com/spreadsheets/d/1aSNSeDOmv_mZvmhE-aCo8yAvdK7FW3udLiHJ_YhwpKA/edit#gid=1234313404
       let articleSource = {};
       if (nodeProps.articleSource) {
         articleSource = {
@@ -75,27 +76,27 @@ const OmnitureConfig = {
       };
       let pageName = '';
       if (nodeProps.template === 'channel') {
-        pageName = `${slug(nodeProps.product)}|home`;
+        pageName = `${ slug(nodeProps.product) }|home`;
       } else {
         pageName = [
-          slug(nodeProps.product)
+          slug(nodeProps.product),
         ];
-        if(nodeProps.topic){
+        if (nodeProps.topic) {
           pageName.push(slug(nodeProps.topic));
         }
-        if(nodeProps.title){
+        if (nodeProps.title) {
           pageName.push(slug(nodeProps.title));
         }
         pageName = pageName.join('|');
       }
 
       let ArticleTitle = [
-        slug(nodeProps.product)
+        slug(nodeProps.product),
       ];
-      if(nodeProps.title){
+      if (nodeProps.title) {
         ArticleTitle.push(slug(nodeProps.title));
       } else {
-        if(nodeProps.topic){
+        if (nodeProps.topic) {
           ArticleTitle.push(slug(nodeProps.topic));
         }
         ArticleTitle.push('home');
@@ -105,11 +106,11 @@ const OmnitureConfig = {
       const output = {
         channel: slug(nodeProps.channel),
         pageName,
-        pageURL: location.href,
+        pageURL: document.location.href,
         contextData: {
           subsection: (nodeProps.topic) ? slug(nodeProps.topic) : '',
         },
-        prop1: slug(`${nodeProps.channel}_${nodeProps.topic}`),
+        prop1: slug(`${ nodeProps.channel }_${ nodeProps.topic }`),
         prop4: slug(nodeProps.template),
         prop5: ArticleTitle,
         prop6: OmnitureUtils.graphShot(),
@@ -118,12 +119,12 @@ const OmnitureConfig = {
         prop11: OmnitureUtils.userLoggedIn(),
         prop13: OmnitureUtils.userSubscription(),
         prop31: OmnitureUtils.articlePublishDate(nodeProps.publishDate),
-        prop32: location.href,
+        prop32: document.location.href,
         prop34: OmnitureUtils.deviceDetection(),
         prop40: '',
         prop53: OmnitureUtils.subscriptionRemaningMonths(),
         prop54: OmnitureUtils.expiredSubscriptionInfo(),
-        eVar1: slug(`${nodeProps.channel}_${nodeProps.topic}`),
+        eVar1: slug(`${ nodeProps.channel }_${ nodeProps.topic }`),
         eVar4: slug(nodeProps.template),
         eVar5: ArticleTitle,
         eVar6: OmnitureUtils.graphShot(),
@@ -133,12 +134,14 @@ const OmnitureConfig = {
         eVar11: OmnitureUtils.userLoggedIn(),
         eVar13: OmnitureUtils.userSubscription(),
         eVar31: OmnitureUtils.articlePublishDate(nodeProps.publishDate),
-        eVar32: location.href,
+        eVar32: document.location.href,
         eVar40: '',
         events: 'event2',
         ...articleSource,
       };
+      /* eslint-disable no-console */
       console.info('Omniture payload', output);
+      /* eslint-enable no-console */
       return output;
     },
   },

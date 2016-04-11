@@ -26,18 +26,23 @@ export default class OmniturePlugin {
           url: this.config.externalScript,
           type: 'script',
         });
+      /* eslint-disable consistent-return */
       this.script = pOmniture.then(() => {
+        /* global window */
         if (typeof window === 'undefined' || !window.s_gi) {
           return false;
         }
-        const props = {};
-        for (let i = 1; i < 50; ++i) {
-          props['prop' + i] = '';
-        }
-        let s = window.s_gi(this.config.account);
+        const sOmnitureObject = window.s_gi(this.config.account);
         // If plugins are enabled Omniture has a "doPlugins" callback
-        const doPluginsDefault = function(){};
-        const doPlugins = this.config.initialProps.usePlugins && this.config.doPlugins ? this.config.doPlugins : doPluginsDefault;
+        function doPluginsDefault() {
+          return true;
+        }
+        let doPlugins = {};
+        if (this.config.initialProps.usePlugins && this.config.doPlugins) {
+          doPlugins = this.config.doPlugins;
+        } else {
+          doPlugins = doPluginsDefault;
+        }
 
         Object.assign(
           this,
@@ -46,13 +51,15 @@ export default class OmniturePlugin {
         );
 
         this.trackingObject = Object.assign(
-          s,
+          sOmnitureObject,
           this.config.initialProps.usePlugins ? LoadOmniturePlugins() : {},
           { doPlugins },
           this.config.initialProps
         );
-      }).catch(function(e) {
-        console.error('An error loading or executing Omniture has occured: ', e);
+      }).catch((scriptError) => {
+        /* eslint-disable no-console */
+        console.error('An error loading or executing Omniture has occured: ', scriptError);
+        /* eslint-enable no-console */
       });
     }
     return this.script;
@@ -61,7 +68,6 @@ export default class OmniturePlugin {
   generatePayload(payload, eventName) {
     const eventHandler = this.config.eventHandlers[eventName];
     let props = {};
-
     if (payload && payload.i13nNode && payload.i13nNode.getMergedModel) {
       props = Object.assign(payload, payload.i13nNode.getMergedModel());
     }
@@ -72,19 +78,19 @@ export default class OmniturePlugin {
   }
 
   /* eslint-disable no-unused-vars */
-  pageview(payload, callback) {
+  pageview(payload, pageviewCallback) {
     return this.ensureScriptHasLoaded().then(() => (
-      this.track(this.generatePayload(payload, 'pageview'), callback)
+      this.track(this.generatePayload(payload, 'pageview'), pageviewCallback)
     ));
   }
 
-  click(payload, callback) {
+  click(payload, clickCallback) {
     return this.ensureScriptHasLoaded().then(() => (
-      this.trackLink(this.generatePayload(payload, 'click'), callback)
+      this.trackLink(this.generatePayload(payload, 'click'), clickCallback)
     ));
   }
 
-  track(additionalTrackingProps, callback) {
+  track(additionalTrackingProps, trackCallback) {
     const newTrackingObject = Object.assign(
       this.trackingObject,
       additionalTrackingProps
@@ -94,24 +100,30 @@ export default class OmniturePlugin {
     if (omnitureTrackingPixel && typeof window !== 'undefined' && window.document) {
       window.document.write(omnitureTrackingPixel);
     }
-    return Promise.resolve().then(callback);
+    return Promise.resolve().then(trackCallback);
   }
 
-  trackLink(additionalTrackingProps, callback) {
+  trackLink(additionalTrackingProps, tracklinkCallback) {
     return new Promise((resolve) => {
       const newTrackingObject = Object.assign(
         this.trackingObject,
         additionalTrackingProps
       );
       // LinkType and linkName are mandatory.
-      if(!newTrackingObject.linkType || !newTrackingObject.linkName){
+      if (!newTrackingObject.linkType || !newTrackingObject.linkName) {
         // Prevent errot for old browsers.
-        if(typeof console === "undefined") {
+        if (typeof console === 'undefined') {
+          /* eslint-disable no-native-reassign */
           console = {
-              log: function() { },
+            log() {
+              return true;
+            },
           };
+          /* eslint-enable no-native-reassign */
         }
+        /* eslint-disable no-console */
         console.log('LinkType and linkName are mandatory and should be provided.');
+        /* eslint-enable no-console */
       } else {
         // `tl` is Omniture's TrackLink function.
         newTrackingObject.tl(
@@ -120,8 +132,8 @@ export default class OmniturePlugin {
           newTrackingObject.linkName,
           newTrackingObject.variableOverrides,
           () => {
-            if (callback) {
-              callback();
+            if (tracklinkCallback) {
+              tracklinkCallback();
             }
             resolve();
           },
@@ -129,5 +141,4 @@ export default class OmniturePlugin {
       }
     });
   }
-
-};
+}

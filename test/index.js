@@ -1,3 +1,4 @@
+/* eslint-disable id-match */
 import ReactI13nOmniture from '../src/index';
 import chai from 'chai';
 import spies from 'chai-spies';
@@ -5,8 +6,12 @@ import cookie from 'react-cookie';
 import OmnitureUtils from '../src/OmnitureUtils';
 import User from '@economist/user';
 import Config from '../src/config';
-mocha.setup({globals: ['s_code', 's_objectID', 's_gi', 's_giqf', 's_giq', 's_an', 's_sp', 's_jn', 's_rep', 's_d', 's_fe', 's_fa', 's_ft', 's_c_il', 's_c_in', 's_i_economist' ]});
-let should = chai.should();
+mocha.setup({ globals: [ 's_code', 's_objectID', 's_gi', 's_giqf', 's_giq',
+'s_an', 's_sp', 's_jn', 's_rep', 's_d', 's_fe', 's_fa', 's_ft', 's_c_il',
+'s_c_in', 's_i_economist' ] });
+/* eslint-disable no-unused-vars */
+const should = chai.should();
+/* eslint-enable no-unused-vars */
 chai.use(spies);
 
 const pluginConfig = {
@@ -15,7 +20,9 @@ const pluginConfig = {
     visitorNamespace: 'economist',
     trackingServer: 'stats.economist.com',
     trackingServerSecure: 'sstats.economist.com',
+    /* eslint-disable id-length */
     dc: '122',
+    /* eslint-enable id-length */
     linkTrackVars: [
       'pageName',
       'channel',
@@ -39,22 +46,22 @@ const pluginConfig = {
   },
   externalScript: Config.externalScript,
   eventHandlers: {
-    click: (nodeProps) => {
+    click(nodeProps) {
       // Just a fake manipulation
       return {
-        fakeProps: 'fakeManipulation'
+        fakeProps: 'fakeManipulation',
+        ...nodeProps,
       };
     },
-    pageview: (nodeProps) => {
+    pageview(nodeProps) {
       // Just a fake manipulation
       return {
-        fakeProps: 'fakeManipulation'
+        fakeProps: 'fakeManipulation',
+        ...nodeProps,
       };
     },
   },
 };
-const plugin = new ReactI13nOmniture(pluginConfig);
-
 describe('OmniturePlugin is a i13n plugin for Omniture', () => {
   describe('ensureScriptHasLoaded', () => {
     it('calls loadExternalScript if it was passed', () => {
@@ -65,19 +72,6 @@ describe('OmniturePlugin is a i13n plugin for Omniture', () => {
     });
   });
   describe('it provides events interfaces', () => {
-    describe('pageview event interface', () => {
-      it('it expose a method with 2 arguments that calls a Omniture track method', ()=> {
-        // TODO finish the test implementation
-        // var pageviewTrack = chai.spy(plugin, 'track');
-        // const func = function(){};
-        // const payload = {};
-        // plugin.pageview(payload, func);
-        // debugger;
-        // pageviewTrack.should.have.been.called.with({
-        //   fakeProps: 'fakeManipulation'
-        // }, func);
-      });
-    });
     describe('Omniture utils is a set of utilities', () => {
       describe('it gets information of the user type', () => {
         it('it can read user subscription information if cookie exist', () => {
@@ -115,9 +109,8 @@ describe('OmniturePlugin is a i13n plugin for Omniture', () => {
         });
         it('it return EXPIRED if there is a recently expired subscription', () => {
           cookie.remove('ec_omniture_user_sub');
-          const today = new Date('2016/03/30');
-          let expiresDate = '2016/03/28';
-          const subscriberInformation = `registered|ent-product-A*2011/02/16|${expiresDate}|ent-product-A`;
+          const expiresDate = '2016/03/28';
+          const subscriberInformation = `registered|ent-product-A*2011/02/16|${ expiresDate }|ent-product-A`;
           cookie.save('ec_omniture_user_sub', subscriberInformation);
           User.setMultiUserLicense(false);
           OmnitureUtils.subscriptionRemaningMonths().should.equal('EXPIRED');
@@ -125,8 +118,8 @@ describe('OmniturePlugin is a i13n plugin for Omniture', () => {
         it('it return Less_than_1_MO if the subscription is due to expire', () => {
           cookie.remove('ec_omniture_user_sub');
           const today = new Date('2016/03/30');
-          let expiresDate = '2016/04/05';
-          const subscriberInformation = `registered|ent-product-A*2011/02/16|${expiresDate}|ent-product-A`;
+          const expiresDate = '2016/04/05';
+          const subscriberInformation = `registered|ent-product-A*2011/02/16|${ expiresDate }|ent-product-A`;
           cookie.save('ec_omniture_user_sub', subscriberInformation);
           User.setMultiUserLicense(false);
           OmnitureUtils.subscriptionRemaningMonths(today).should.equal('Less_than_1_MO');
@@ -134,8 +127,8 @@ describe('OmniturePlugin is a i13n plugin for Omniture', () => {
         it('it return 1MO if 1 month is remaining', () => {
           cookie.remove('ec_omniture_user_sub');
           const today = new Date('2016/03/30');
-          let expiresDate = '2016/05/05';
-          const subscriberInformation = `registered|ent-product-A*2011/02/16|${expiresDate}|ent-product-A`;
+          const expiresDate = '2016/05/05';
+          const subscriberInformation = `registered|ent-product-A*2011/02/16|${ expiresDate }|ent-product-A`;
           cookie.save('ec_omniture_user_sub', subscriberInformation);
           User.setMultiUserLicense(false);
           OmnitureUtils.subscriptionRemaningMonths(today).should.equal('1MO');
@@ -143,8 +136,8 @@ describe('OmniturePlugin is a i13n plugin for Omniture', () => {
         it('it return 2MO if more than 2 but less than 3 months are remaining', () => {
           cookie.remove('ec_omniture_user_sub');
           const today = new Date('2016/03/30');
-          let expiresDate = '2016/06/05';
-          const subscriberInformation = `registered|ent-product-A*2011/02/16|${expiresDate}|ent-product-A`;
+          const expiresDate = '2016/06/05';
+          const subscriberInformation = `registered|ent-product-A*2011/02/16|${ expiresDate }|ent-product-A`;
           cookie.save('ec_omniture_user_sub', subscriberInformation);
           User.setMultiUserLicense(false);
           OmnitureUtils.subscriptionRemaningMonths(today).should.equal('2MO');

@@ -40,7 +40,7 @@
     "doc:html": "hbs -D package.json -H @economist/doc-pack -o $npm_package_directories_site $npm_package_config_doc_html_files",
     "doc:js": "browserify $npm_package_config_doc_js_options $npm_package_directories_test/*.js -o $npm_package_directories_site/bundle.js",
     "lint": "npm-run-all --parallel lint:*",
-    "lint:js": "eslint --ignore-path .gitignore .",
+    "lint:js": "eslint --ignore-path .gitignore . --ignore-pattern src/OmniturePlugins.js --ignore-pattern assets",
     "prepages": "npm run doc",
     "pages": "git-directory-deploy --directory $npm_package_directories_site --branch gh-pages",
     "provision": "provision-react-component",
