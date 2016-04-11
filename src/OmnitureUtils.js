@@ -16,9 +16,9 @@ const OmnitureUtils = {
     const offset = -5.0;
     const clientDate = new Date();
     const hourInMilliseconds = 60000;
-    const utc = clientDate.getTime() + (clientDate.getTimezoneOffset() * hourInMilliseconds);
+    const currentTime = clientDate.getTime() + (clientDate.getTimezoneOffset() * hourInMilliseconds);
     const sixHourInMilliseconds = 3600000;
-    const serverDate = new Date(utc + (sixHourInMilliseconds * offset));
+    const serverDate = new Date(currentTime + (sixHourInMilliseconds * offset));
     return serverDate;
   },
   hourOfTheDay() {
