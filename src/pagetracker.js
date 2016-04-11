@@ -1,4 +1,6 @@
 import React from 'react';
+/* eslint-disable id-match */
+import { ReactI13n } from 'react-i13n';
 
 export default function tracker(Component, config) {
   const tracked = React.createClass({
@@ -6,9 +8,9 @@ export default function tracker(Component, config) {
       this.emitPageView();
     },
     emitPageView() {
-      /* global reactI13n */
       /* eslint-disable id-match, no-underscore-dangle */
-      const pageInfo = reactI13n.getRootI13nNode()._model;
+      const pageInfo = ReactI13n.getRootI13nNode()._model;
+      /* eslint-enable id-match, no-underscore-dangle */
       [ 'title', 'template', 'topic', 'publishDate' ]
       .map((currentValue) => {
         let newProp = {};
@@ -24,7 +26,7 @@ export default function tracker(Component, config) {
         pageInfo[currentValue] = newProp;
         return pageInfo;
       });
-      reactI13n.execute('pageview', pageInfo);
+      ReactI13n.execute('pageview', pageInfo);
     },
     render() {
       return <Component {...this.props} />;
