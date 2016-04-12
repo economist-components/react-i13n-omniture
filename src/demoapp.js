@@ -2,8 +2,6 @@
 import React from 'react';
 import { createI13nNode } from 'react-i13n';
 // Mockup data.
-const loggedin = 'logged_in';
-const today = new Date().toString();
 const I13nAnchor = createI13nNode('a', {
   isLeafNode: true,
   bindClickEvent: true,
@@ -32,7 +30,6 @@ export default class DemoApp extends React.Component {
       publishDate: new Date(),
       // This will overwrite the default
       articleSource: 'web',
-      // TODO: Detect User ID
       userID: 15,
     });
   }

@@ -11,4 +11,4 @@ const TrackedApp = setupI13n(DemoApp, {
   },
   isViewportEnabled: true,
 }, [ new ReactI13nOmniture(OmnitureConfig) ]);
-export default(<TrackedApp/>);
+export default(< TrackedApp />);
