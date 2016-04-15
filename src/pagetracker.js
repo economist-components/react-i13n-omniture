@@ -1,6 +1,6 @@
 import React from 'react';
 /* eslint-disable id-match */
-import { ReactI13n } from 'react-i13n';
+import ReactI13n from 'react-i13n';
 
 export default function tracker(Component, config) {
   const tracked = React.createClass({
