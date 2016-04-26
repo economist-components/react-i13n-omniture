@@ -145,7 +145,7 @@
     "slugger": "^1.0.1",
     "stylelint": "^5.0.1",
     "stylelint-config-strict": "^4.0.0",
-    "validate-commit-msg": "^2.4.0",
+    "validate-commit-msg": "^2.6.1",
     "watchify": "^3.7.0"
   },
   "peerDependencies": {
