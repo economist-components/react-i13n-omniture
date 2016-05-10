@@ -99,7 +99,7 @@
   "dependencies": {
     "@economist/user": "^2.0.0",
     "promisescript": "^1.1.0",
-    "react": "^0.14.8",
+    "react": "^15.0.2",
     "react-cookie": "^0.4.3",
     "react-i13n": "^2.0.12"
   },
