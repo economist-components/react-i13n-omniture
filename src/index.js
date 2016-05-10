@@ -81,7 +81,11 @@ export default class OmniturePlugin {
   pageview(payload, pageviewCallback) {
     return this.ensureScriptHasLoaded().then(() => (
       this.track(this.generatePayload(payload, 'pageview'), pageviewCallback)
-    ));
+    )).catch((pageViewError) => {
+      /* eslint-disable no-console */
+      console.error(pageViewError.stack);
+      /* eslint-enable no-console */
+    });
   }
 
   click(payload, clickCallback) {
