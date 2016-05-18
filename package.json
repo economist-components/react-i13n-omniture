@@ -100,7 +100,7 @@
     "@economist/user": "^2.0.0",
     "promisescript": "^1.1.0",
     "react": "^0.14.8",
-    "react-cookie": "^0.4.3",
+    "react-cookie": "^0.4.6",
     "react-i13n": "^2.0.12"
   },
   "devDependencies": {
