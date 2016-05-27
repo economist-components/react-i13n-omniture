@@ -101,7 +101,7 @@
     "promisescript": "^1.1.0",
     "react": "^0.14.8",
     "react-cookie": "^0.4.3",
-    "react-i13n": "^2.0.12"
+    "react-i13n": "^2.1.1"
   },
   "devDependencies": {
     "@economist/doc-pack": "^1.0.6",
