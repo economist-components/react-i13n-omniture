@@ -162,7 +162,6 @@
     "react-cookie": "^0.4.3",
     "react-dom": "^0.14.8||^15.0.0",
     "semantic-release": "^4.3.5",
-    "slug": "^0.9.1",
     "slugger": "^1.0.1",
     "stylelint": "^6.3.3",
     "stylelint-config-strict": "^5.0.0",
