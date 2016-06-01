@@ -113,7 +113,7 @@
   },
   "devDependencies": {
     "@economist/doc-pack": "^1.0.7",
-    "@economist/provision-react-component": "3.0.3",
+    "@economist/provision-react-component": "3.1.0",
     "babel-cli": "^6.6.5",
     "babel-core": "^6.7.4",
     "babel-eslint": "^6.0.4",
