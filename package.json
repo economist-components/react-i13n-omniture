@@ -1,10 +1,10 @@
 {
-  "name": "@economist/component-react-i-13-n-omniture",
+  "name": "@economist/react-i13n-omniture",
   "version": "0.0.0-development",
   "description": "Omniture plugin for react-i13n",
-  "homepage": "https://github.com/economist-components/component-react-i-13-n-omniture",
+  "homepage": "https://github.com/economist-components/react-i13n-omniture",
   "bugs": {
-    "url": "https://github.com/economist-components/component-react-i-13-n-omniture/issues"
+    "url": "https://github.com/economist-components/react-i13n-omniture/issues"
   },
   "license": "MIT",
   "author": "The Economist (http://economist.com)",
