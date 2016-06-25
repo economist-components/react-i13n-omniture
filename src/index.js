@@ -15,6 +15,7 @@ export default class OmniturePlugin {
     return {
       click: this.click.bind(this),
       pageview: this.pageview.bind(this),
+      paywallvalidation: this.paywallvalidation.bind(this),
     };
   }
 
@@ -78,14 +79,29 @@ export default class OmniturePlugin {
   }
 
   /* eslint-disable no-unused-vars */
-  pageview(payload, pageviewCallback) {
-    return this.ensureScriptHasLoaded().then(() => (
-      this.track(this.generatePayload(payload, 'pageview'), pageviewCallback)
-    )).catch((pageViewError) => {
+  customEvent(payload, customEventCallback, customEventName = 'pageview') {
+    return this.ensureScriptHasLoaded().then((resolve) => {
+      const newPayload = this.generatePayload(payload, customEventName);
+      if (newPayload) {
+        this.track(newPayload, customEventCallback);
+      } else {
+        resolve();
+      }
+    }).catch((customEventError) => {
       /* eslint-disable no-console */
-      console.error(pageViewError.stack);
+      console.error(customEventError.stack);
       /* eslint-enable no-console */
     });
+  }
+
+  pageview(payload) {
+    return this.customEvent(payload);
+  }
+
+  // Some pages could be behind a paywall, we want send the data after the
+  // validation of the paywall.
+  paywallvalidation(payload) {
+    return this.customEvent(payload, () => true, 'paywallvalidation');
   }
 
   click(payload, clickCallback) {
