@@ -80,12 +80,10 @@ export default class OmniturePlugin {
 
   /* eslint-disable no-unused-vars */
   customEvent(payload, customEventCallback, customEventName = 'pageview') {
-    return this.ensureScriptHasLoaded().then((resolve) => {
+    return this.ensureScriptHasLoaded().then(() => {
       const newPayload = this.generatePayload(payload, customEventName);
       if (newPayload) {
         this.track(newPayload, customEventCallback);
-      } else {
-        resolve();
       }
     }).catch((customEventError) => {
       /* eslint-disable no-console */
