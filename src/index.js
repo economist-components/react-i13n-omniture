@@ -84,8 +84,6 @@ export default class OmniturePlugin {
       const newPayload = this.generatePayload(payload, customEventName);
       if (newPayload) {
         this.track(newPayload, customEventCallback);
-      } else {
-        Promise.resolve();
       }
     }).catch((customEventError) => {
       /* eslint-disable no-console */
