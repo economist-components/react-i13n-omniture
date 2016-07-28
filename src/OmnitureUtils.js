@@ -59,11 +59,12 @@ const OmnitureUtils = {
   articlePublishDate(date) {
     // Returns the date the article was published in this format yyyy|mm|dd
     const doubleDigitLimit = 10;
-    // getMonth() returns 0-11
-    let month = date.getMonth() + 1;
-    month = month < doubleDigitLimit ? `0${ month }` : month;
-    const day = date.getDate() < doubleDigitLimit ? `0${ date.getDate() }` : date.getDate();
-    return (date instanceof Date) ? [ date.getFullYear(), month, day ].join('|') : '';
+    return (date instanceof Date) ? [
+      date.getFullYear(),
+      // getMonth() returns 0-11
+      date.getMonth() + 1 < doubleDigitLimit ? `0${ date.getMonth() + 1 }` : date.getMonth() + 1,
+      date.getDate() < doubleDigitLimit ? `0${ date.getDate() }` : date.getDate(),
+    ].join('|') : '';
   },
   userSubscription() {
     // Returns the customer type and the product they have delimited using a pipe.
