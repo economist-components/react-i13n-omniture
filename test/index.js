@@ -148,6 +148,12 @@ describe('OmniturePlugin is a i13n plugin for Omniture', () => {
           OmnitureUtils.subscriptionRemaningMonths().should.equal('');
         });
       });
+      describe('articlePublishDate', () => {
+        it('should format date for omniture', () => {
+          const date = new Date('2016/07/08');
+          OmnitureUtils.articlePublishDate(date).should.equal('2016|07|08');
+        });
+      });
     });
   });
 });
