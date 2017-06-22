@@ -57,6 +57,8 @@ export default class OmniturePlugin {
           { doPlugins },
           this.config.initialProps
         );
+        // Expose Omniture for Maximiser.
+        window.s = sOmnitureObject;
       }).catch((scriptError) => {
         /* eslint-disable no-console */
         console.error('An error loading or executing Omniture has occured: ', scriptError);
