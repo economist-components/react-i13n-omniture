@@ -1,5 +1,6 @@
 /* eslint-disable id-match */
 import React from 'react';
+import PropTypes from 'prop-types';
 import { createI13nNode } from 'react-i13n';
 // Mockup data.
 const I13nAnchor = createI13nNode('a', {
@@ -18,7 +19,7 @@ export default class DemoApp extends React.Component {
 
   static get propTypes() {
     return {
-      i13n: React.PropTypes.object,
+      i13n: PropTypes.object,
     };
   }
 

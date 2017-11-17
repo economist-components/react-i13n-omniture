@@ -48,6 +48,7 @@ module.exports = function configureKarma(config) {
     logLevel: config.LOG_INFO,
     frameworks: [ 'browserify', 'mocha' ],
     files: [
+      'node_modules/babel-polyfill/browser.js',
       path.join(packageJson.directories.test, '*.js'),
     ],
     exclude: [],
