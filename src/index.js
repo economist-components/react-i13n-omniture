@@ -15,7 +15,6 @@ export default class OmniturePlugin {
     return {
       click: this.click.bind(this),
       pageview: this.pageview.bind(this),
-      pageviewOmnitureOnly: this.pageviewOmnitureOnly.bind(this),
       paywallvalidation: this.paywallvalidation.bind(this),
     };
   }
@@ -103,11 +102,6 @@ export default class OmniturePlugin {
   // validation of the paywall.
   paywallvalidation(payload) {
     return this.customEvent(payload, () => true, 'paywallvalidation');
-  }
-
-  // In some case is necessary call a pageview not listened by others.
-  pageviewOmnitureOnly(payload) {
-    return this.customEvent(payload, () => true, 'pageviewOmnitureOnly');
   }
 
   click(payload, clickCallback) {
