@@ -15,8 +15,8 @@ export default class OmniturePlugin {
     return {
       click: this.click.bind(this),
       pageview: this.pageview.bind(this),
-      pageviewOmnitureOnly: this.pageviewOmnitureOnly.bind(this),
       paywallvalidation: this.paywallvalidation.bind(this),
+      pageviewOmnitureOnly: this.pageviewOmnitureOnly.bind(this),
     };
   }
 
